@@ -1,22 +1,22 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "InferiorBot",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "Telegram most useless bot",
   "keywords": [
     "OpenShift",
     "Node.js",
     "application",
-    "openshift"
+    "openshift",
+	"telegram"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "Abner M. C. Araujo",
+    "email": "abner.math.c@gmail.com"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://www.picoledelimao.github.io/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/picoledelimao/inferiorbot/"
   },
 
   "engines": {
@@ -25,11 +25,13 @@
   },
 
   "dependencies": {
-    "express": "~3.4.4"
+    "express": "~3.4.4",
+	"node-telegram-bot-api" : "*",
+	"mongodb" : "*"
   },
   "devDependencies": {},
   "bundleDependencies": [],
 
   "private": true,
-  "main": "server.js"
+  "main": "src/server.js"
 }
