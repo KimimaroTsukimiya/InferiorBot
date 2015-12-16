@@ -31,7 +31,7 @@ manager.addCommand(/^\/(\w+)(@inferiorbot)?(\W.+)$/i, '/<Rótulo> <Frase> - Salv
 manager.addCommand(/^\/(\w+)(@inferiorbot)?$/i, '/<Rótulo> - Encaminha uma mensagem enviada que foi gravada sob rótulo.', require('./commands/get-label'));
 manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?$/i, '/remove - Remove a última mensagem enviada por mim.', require('./commands/delete-label'));
 manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?\s+(\w+)(\W.+)$/i, '/remove <Rótulo> <Frase> - Remove uma frase associada a um rótulo.', require('./commands/delete-phrase'));
-//manager.init();
+manager.init();
 
 // Setup express
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8081);
