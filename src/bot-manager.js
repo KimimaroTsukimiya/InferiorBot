@@ -6,6 +6,7 @@ BotManager = function(bot, mongo, vocabulary, utils) {
 	this.commands = [];
 	this.lastMessage = [];
 	this.lastSent = [];
+	this.lastResult = [];
 	this.reservedWords = [];
 }
 
@@ -23,6 +24,10 @@ BotManager.prototype.init = function() {
 				'type' : (msg.audio ? 'audio' : msg.voice ? 'voz' : msg.video ? 'video' : msg.photo ? 'imagem' : msg.sticker ? 'sticker' : 'texto')
 			};
 		}
+	});
+	this.bot.onText(/^\/mais(@inferiorbot)?$/i, function(msg) {
+		var chatId = msg.chat.id;
+		this.sendResults(chatId);
 	});
 }
 
@@ -52,4 +57,19 @@ BotManager.prototype.getCommandsString = function() {
 		str += this.commands[i].description + '\n';
 	}
 	return str;
+}
+
+BotManager.prototype.sendResults = function(chatId) {
+	if (this.lastResult[chatId].offset < this.lastResult[chatId].content.length) {
+		var str = '';
+		var min = Math.min(this.lastResult[chatId].offset + 10, this.lastResult[chatId].content.length);
+		for (var i = 0; i < min; i++) {
+			str += '/' + this.lastResult[chatId].content[i].label + '\n';
+		}
+		if (min != this.lastResult[chatId].content.length) {
+			str += '\nDigite /mais para mostrar mais resultados.';
+			this.lastResult[chatId].offset += 10;
+		}
+		this.bot.sendMessage(chatId, str);
+	}
 }
