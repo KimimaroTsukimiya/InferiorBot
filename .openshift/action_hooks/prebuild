@@ -1,0 +1,2 @@
+export TELEGRAM_TOKEN="137502825:AAEDt2s1gHWZdxNGNuK14rkse3PAdZ7pTxEs"
+echo "Exporting telegram token"
