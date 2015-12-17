@@ -2,10 +2,11 @@ module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var type = matches[2] ? context.utils.escapeRegExp(matches[2].toLowerCase().replace(/^\s+/, '')) : '.*';
 	var keyword = matches[3] ? context.utils.escapeRegExp(matches[3].toLowerCase().replace(/^\s+/, '')) : '.*';
+	bot.sendMessage(chatId, chatId + ' ' + type + ' ' + keyword);
 	context.mongo.label.find({
 		'chatId': chatId,
-		'type' : new RegExp('^' + type + '$', 'i'),
-		'label' : new RegExp(keyword.toLowerCase(), 'i')
+		'type' : new RegExp(type, 'i'),
+		'label' : new RegExp(keyword, 'i')
 	}).toArray(function(err, arr) {
 		if (err) {
 			context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
