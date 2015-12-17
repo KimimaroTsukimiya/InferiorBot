@@ -14,6 +14,21 @@ BotManager.prototype.addLastSent = function(chatId, id) {
 	this.lastSent[chatId] = id;
 }
 
+BotManager.prototype.sendResults = function(chatId) {
+	if (this.lastResult[chatId] && this.lastResult[chatId].offset < this.lastResult[chatId].content.length) {
+		var str = '';
+		var min = Math.min(this.lastResult[chatId].offset + 10, this.lastResult[chatId].content.length);
+		for (var i = 0; i < min; i++) {
+			str += '/' + this.lastResult[chatId].content[i].label + '\n';
+		}
+		if (min != this.lastResult[chatId].content.length) {
+			str += '\nDigite /mais para mostrar mais resultados.';
+			this.lastResult[chatId].offset += 10;
+		}
+		this.bot.sendMessage(chatId, str);
+	}
+}
+
 BotManager.prototype.init = function() {
 	var self = this;
 	this.bot.on('message', function(msg) {
@@ -57,19 +72,4 @@ BotManager.prototype.getCommandsString = function() {
 		str += this.commands[i].description + '\n';
 	}
 	return str;
-}
-
-BotManager.prototype.sendResults = function(chatId) {
-	if (this.lastResult[chatId].offset < this.lastResult[chatId].content.length) {
-		var str = '';
-		var min = Math.min(this.lastResult[chatId].offset + 10, this.lastResult[chatId].content.length);
-		for (var i = 0; i < min; i++) {
-			str += '/' + this.lastResult[chatId].content[i].label + '\n';
-		}
-		if (min != this.lastResult[chatId].content.length) {
-			str += '\nDigite /mais para mostrar mais resultados.';
-			this.lastResult[chatId].offset += 10;
-		}
-		this.bot.sendMessage(chatId, str);
-	}
 }
