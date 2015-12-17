@@ -10,10 +10,10 @@ module.exports = function(context, msg, matches) {
 		if (err) {
 			context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
 		} else {
-			context.lastResult[chatId] = {
+			context.addLastResult(chatId, {
 				'content' : arr,
 				'offset' : 0
-			};
+			});
 			context.sendResults(chatId);
 		}
 	});

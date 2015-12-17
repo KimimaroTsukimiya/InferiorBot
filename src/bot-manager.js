@@ -14,6 +14,10 @@ BotManager.prototype.addLastSent = function(chatId, id) {
 	this.lastSent[chatId] = id;
 }
 
+BotManager.prototype.addLastResult = function(chatId, result) {
+	this.lastResult[chatId] = result;
+}
+
 BotManager.prototype.sendResults = function(chatId) {
 	if (this.lastResult[chatId] && this.lastResult[chatId].offset < this.lastResult[chatId].content.length) {
 		var str = '';
