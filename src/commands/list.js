@@ -1,13 +1,7 @@
 module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
-	var type = '.*';
-	if (matches[2]) {
-		type = context.utils.escapeRegExp(matches[2].toLowerCase());
-	}
-	var keyword = '.*';
-	if (matches[3]) {
-		keyword = context.utils.escapeRegExp(matches[3].toLowerCase());
-	}
+	var type = matches[2] ? matches[2].replace(/^\s+/, '') : '.*';
+	var keyword = matches[3] ? matches[3].toLowerCase().replace(/^\s+/, '') : '.*';
 	context.bot.sendMessage(chatId, chatId + ' ' + type + ' ' + keyword);
 	context.mongo.label.find({
 		'chatId': chatId,
