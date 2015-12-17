@@ -22,7 +22,7 @@ BotManager.prototype.sendResults = function(chatId) {
 	if (this.lastResult[chatId] && this.lastResult[chatId].offset < this.lastResult[chatId].content.length) {
 		var str = '';
 		var min = Math.min(this.lastResult[chatId].offset + 10, this.lastResult[chatId].content.length);
-		for (var i = 0; i < min; i++) {
+		for (var i = this.lastResult[chatId].offset; i < min; i++) {
 			str += '/' + this.lastResult[chatId].content[i] + '\n';
 		}
 		if (min != this.lastResult[chatId].content.length) {
