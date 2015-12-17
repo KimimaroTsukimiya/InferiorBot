@@ -3,7 +3,7 @@ module.exports = function(context, msg, matches) {
 	var type = matches[2].toLowerCase() || '.*';
 	var keyword = matches[3].toLowerCase() || '.*';
 	context.mongo.find({
-		'chatId', chatId,
+		'chatId': chatId,
 		'type' : new RegExp('^' + context.utils.escapeRegExp(type.toLowerCase()) + '$', 'i'),
 		'label' : new RegExp(context.utils.escapeRegExp(keyword.toLowerCase()), 'i')
 	}).toArray(function(err, arr) {
