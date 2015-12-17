@@ -1,7 +1,7 @@
 module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var type = matches[2].toLowerCase() || '.*';
-	var keyword = matches[3].toLowerCase() || '.*';
+	var keyword = matches[3].toLowerCase().replace(/^\s+/, '') || '.*';
 	context.mongo.find({
 		'chatId': chatId,
 		'type' : new RegExp('^' + context.utils.escapeRegExp(type.toLowerCase()) + '$', 'i'),
