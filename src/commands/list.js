@@ -2,11 +2,11 @@ module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var type = matches[2] ? matches[2].replace(/^\s+/, '') : '.*';
 	var keyword = matches[3] ? matches[3].toLowerCase().replace(/^\s+/, '') : '.*';
-	context.mongo.label.distinct({
+	context.mongo.label.distinct('label', {
 		'chatId': chatId,
 		'type' : new RegExp(type, 'i'),
 		'label' : new RegExp(keyword, 'i')
-	}).toArray(function(err, arr) {
+	}, function(err, arr) {
 		if (err) {
 			context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
 		} else {

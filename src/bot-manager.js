@@ -23,7 +23,7 @@ BotManager.prototype.sendResults = function(chatId) {
 		var str = '';
 		var min = Math.min(this.lastResult[chatId].offset + 10, this.lastResult[chatId].content.length);
 		for (var i = 0; i < min; i++) {
-			str += '/' + this.lastResult[chatId].content[i].label + '\n';
+			str += '/' + this.lastResult[chatId].content[i] + '\n';
 		}
 		if (min != this.lastResult[chatId].content.length) {
 			str += '\nDigite /mais para mostrar mais resultados.';
