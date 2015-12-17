@@ -2,15 +2,13 @@ module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var type = '.*';
 	if (matches[2]) {
-		type = matches[2].toLowerCase().replace(/^\s+/, '');
-		type = context.utils.escapeRegExp(type);
+		type = context.utils.escapeRegExp(matches[2].toLowerCase());
 	}
 	var keyword = '.*';
 	if (matches[3]) {
-		keyword = matches[3].toLowerCase().replace(/^\s+/, '');
-		keyword = context.utils.escapeRegExp(keyword);
+		keyword = context.utils.escapeRegExp(matches[3].toLowerCase());
 	}
-	bot.sendMessage(chatId, chatId + ' ' + type + ' ' + keyword);
+	context.bot.sendMessage(chatId, chatId + ' ' + type + ' ' + keyword);
 	context.mongo.label.find({
 		'chatId': chatId,
 		'type' : new RegExp(type, 'i'),
