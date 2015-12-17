@@ -2,7 +2,7 @@ module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var type = matches[2] ? matches[2].replace(/^\s+/, '') : '.*';
 	var keyword = matches[3] ? matches[3].toLowerCase().replace(/^\s+/, '') : '.*';
-	context.mongo.label.find({
+	context.mongo.label.distinct({
 		'chatId': chatId,
 		'type' : new RegExp(type, 'i'),
 		'label' : new RegExp(keyword, 'i')

@@ -46,7 +46,7 @@ BotManager.prototype.init = function() {
 	});
 	this.bot.onText(/^\/mais(@inferiorbot)?$/i, function(msg) {
 		var chatId = msg.chat.id;
-		this.sendResults(chatId);
+		self.sendResults(chatId);
 	});
 }
 
