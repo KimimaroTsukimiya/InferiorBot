@@ -1,7 +1,8 @@
 module.exports = function(context, msg, matches) {
 	var label = matches[1].toLowerCase();
 	var phrase = matches[3];
-	if (!context.isReserved(label) && phrase.charAt(0) != '@') {
+	var firstName = msg.from.first_name.toLowerCase();
+	if (!context.isReserved(label) && phrase.charAt(0) != '@' && label != firstName) {
 		var chatId 	= msg.chat.id;
 		var id 		= msg.message_id;
 		context.mongo.label.find({
@@ -24,7 +25,10 @@ module.exports = function(context, msg, matches) {
 						if (err) {
 							context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
 						} else {
-							context.addLastSent(chatId, id);
+							context.addLastSent(chatId, {
+								'id' : id,
+								'label' : label
+							});
 							context.bot.sendMessage(chatId, context.vocabulary.sendSuccessPhrase(msg.from.first_name));
 						}
 					});

@@ -1,6 +1,7 @@
 module.exports = function(context, msg, matches) {
 	var label = matches[3].toLowerCase();
-	if (!context.isReserved(label)) {
+	var firstName = msg.from.first_name.toLowerCase();
+	if (!context.isReserved(label) && label != firstName) {
 		var chatId 	= msg.chat.id;
 		var id 		= context.lastMessage[chatId].id;
 		var type 	= context.lastMessage[chatId].type;
@@ -24,7 +25,10 @@ module.exports = function(context, msg, matches) {
 						if (err) {
 							context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
 						} else {
-							context.addLastSent(chatId, id);
+							context.addLastSent(chatId, {
+								'id' : id,
+								'label' : label
+							});
 							context.bot.sendMessage(chatId, context.vocabulary.sendSuccess());
 						}
 					});

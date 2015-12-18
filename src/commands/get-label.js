@@ -12,7 +12,10 @@ module.exports = function(context, msg, matches) {
 			} else {
 				if (arr.length > 0) {
 					var response = context.vocabulary.getRandomValue(arr);
-					context.addLastSent(chatId, response.id);
+					context.addLastSent(chatId, { 
+						'id' : response.id,
+						'label' : label
+					});
 					if (response.type == 'frase') { 
 						context.bot.sendMessage(chatId, context.utils.capitalizeFirstLetter(label) + response.content);
 					} else {
