@@ -2,7 +2,8 @@ module.exports = function(context, msg, matches) {
 	var chatId = msg.chat.id;
 	var lastMessage = context.lastSent[chatId];
 	var firstName = msg.from.first_name.toLowerCase();
-	if (lastMessage && lastMessage.label != firstName) {
+	var username = msg.from.username.toLowerCase();
+	if (lastMessage && lastMessage.label != firstName && lastMessage.label != username) {
 		var id = lastMessage.id;
 		context.mongo.label.remove({
 			'chatId' : chatId,

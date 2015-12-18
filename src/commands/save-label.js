@@ -1,7 +1,8 @@
 module.exports = function(context, msg, matches) {
 	var label = matches[3].toLowerCase();
 	var firstName = msg.from.first_name.toLowerCase();
-	if (!context.isReserved(label) && label != firstName) {
+	var username = msg.from.username.toLowerCase();
+	if (!context.isReserved(label) && label != firstName && label != username) {
 		var chatId 	= msg.chat.id;
 		var id 		= context.lastMessage[chatId].id;
 		var type 	= context.lastMessage[chatId].type;

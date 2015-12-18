@@ -4,7 +4,8 @@ module.exports = function(context, msg, matches) {
 	var phrase = matches[4].toLowerCase();
 	var verbose = matches[2] ? true : false;
 	var firstName = msg.from.first_name.toLowerCase();
-	if (label != firstName) {
+	var username = msg.from.username;
+	if (label != firstName && label != username) {
 		context.mongo.label.find({
 			'chatId' : chatId,
 			'label' : label,
