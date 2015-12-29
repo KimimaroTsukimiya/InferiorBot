@@ -7,7 +7,7 @@ var http = require('http');
 var TelegramBot = require('node-telegram-bot-api');
 var mongo = require('./mongo');
 require('./bot-manager');
-
+dsadadasd
 // Initialize connection to MongoDB
 mongo.init(function (err) {
 	if (err) { 
