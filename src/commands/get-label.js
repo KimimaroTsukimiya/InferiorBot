@@ -2,7 +2,7 @@ module.exports = function(context, msg, matches) {
 	var label = matches[1].toLowerCase();
 	var verbose = matches[2] ? true : false;
 	if (!context.isReserved(label)) {
-		var chatId = -6391848;//msg.chat.id;
+		var chatId = msg.chat.id;
 		context.mongo.label.find({
 			'chatId' : chatId,
 			'label' : label
