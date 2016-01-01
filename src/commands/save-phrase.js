@@ -3,7 +3,7 @@ module.exports = function(context, msg, matches) {
 	var phrase = matches[3];
 	var firstName = msg.from.first_name.toLowerCase();
 	var username = msg.from.username.toLowerCase();
-	if (!context.isReserved(label) && phrase.charAt(0) != '@' && label != firstName && label != username) {
+	if (!context.isReserved(label) && phrase.charAt(0) != '@' && label != firstName && label != username && (label != "gleencantor" || username == "abnerhihi")) {
 		var chatId 	= msg.chat.id;
 		var id 		= msg.message_id;
 		context.mongo.label.find({
