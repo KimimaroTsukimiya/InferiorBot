@@ -23,7 +23,7 @@ var token = process.env.TELEGRAM_TOKEN;
 var bot = new TelegramBot(token, {polling: true});
 console.log("Connecting to telegram bot with token " + token);
 
-var manager = new BotManager(bot, mongo, require('./vocabulary'), require('./utils'), 1.0);
+var manager = new BotManager(bot, mongo, require('./vocabulary'), require('./utils'), 0.05);
 manager.setReservedWords('help', 'ajuda', 'grava', 'salva', 'guarda', 'remove', 'deleta', 'lista', 'img', 'mais');
 manager.setPermanentCommands('gleencantor', 'vizircantor', 'zanescantor');
 manager.setAdminPowers('abnerhihi');

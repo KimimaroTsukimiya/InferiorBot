@@ -85,8 +85,14 @@ BotManager.prototype.init = function() {
 				'id' : msg.message_id,
 				'type' : (msg.audio ? 'audio' : msg.voice ? 'voz' : msg.video ? 'video' : msg.photo ? 'imagem' : msg.sticker ? 'sticker' : 'texto')
 			};
-			if (msg.text && Math.random() <= self.responseProbability) {
-				self.talk(msg);
+			if (msg.text) {
+				var probability = self.responseProbability;
+				if (msg.text.length > 5 && msg.text.substr(msg.text.length - 4, msg.text.length) == "bot?") {
+					probability = 1.0;
+				}
+				if (msg.text && Math.random() <= self.responseProbability) {
+					self.talk(msg);
+				}
 			}
 		}
 	});
