@@ -24,7 +24,7 @@ var bot = new TelegramBot(token, {polling: true});
 console.log("Connecting to telegram bot with token " + token);
 
 var manager = new BotManager(bot, mongo, require('./vocabulary'), require('./utils'));
-manager.setReservedWords('help', 'ajuda', 'grava', 'salva', 'guarda', 'remove', 'deleta', 'lista', 'img');
+manager.setReservedWords('help', 'ajuda', 'grava', 'salva', 'guarda', 'remove', 'deleta', 'lista', 'img', 'mais');
 manager.addCommand(/^\/(help|ajuda)(@inferiorbot)?$/i, '/help - Mostra essa lista deplorável.', require('./commands/help'));
 manager.addCommand(/^\/(grava|salva|guarda)(@inferiorbot)?\s+(\w+)$/i, '/salva <Rótulo> - Salva a última mensagem enviada sob um rótulo.', require('./commands/save-label'));
 manager.addCommand(/^\/(\w+)(@inferiorbot)?(\W.+)$/i, '/<Rótulo> <Frase> - Salva uma frase relacionada a um rótulo.', require('./commands/save-phrase'));
