@@ -58,7 +58,7 @@ BotManager.prototype.talk = function(msg) {
 		var count = 0;
 		var self = this;
 		this.getNumOccurrences(words[i], chatId, function(word, occurrences) {
-			if (occurrences > 0) occurrences = Math.floor(1.0 / occurrences * 100); // penalize very frequent words 
+			//if (occurrences > 0) occurrences = Math.floor(1.0 / occurrences * 100); // penalize very frequent words 
 			for (var j = 0; j < occurrences; j++) {
 				allOccurrences.push(word);
 			}
