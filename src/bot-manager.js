@@ -38,6 +38,7 @@ BotManager.prototype.sendResults = function(chatId) {
 }
 
 BotManager.prototype.getNumOccurrences = function(word, chatId, callback) {
+	if (word.length == 0) return callback(word, 0);
 	var self = this;
 	this.mongo.label.aggregate([
 		{ $match : { 'label' : new RegExp('^' + self.utils.escapeRegExp(word) + '$', 'i'), 'chatId' : chatId } },
