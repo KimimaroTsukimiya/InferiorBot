@@ -62,7 +62,7 @@ BotManager.prototype.talk = function(msg) {
 			if (word == "o" || word == "que" || word == "voc" || word == "voce") {
 				occurrences = Math.floor(occurrences / 5);
 			} else if (word == "a" || word == "bot") {
-				occurrences = Math.floor(occurrences / 10);
+				occurrences = 0;
 			}
 			for (var j = 0; j < occurrences; j++) {
 				allOccurrences.push(word);
