@@ -26,7 +26,7 @@ BotManager.prototype.sendResults = function(chatId) {
 			str += '/' + this.lastResult[chatId].content[i].label + ' (' + this.lastResult[chatId].content[i].count + ')\n';
 		}
 		if (min != this.lastResult[chatId].content.length) {
-			str += '\nDigite /mais para mostrar mais resultados (mostrando ' + this.lastResult[chatId].offset + ' de ' + this.lastResult[chatId].content.length + ' resultados).';
+			str += '\nDigite /mais para mostrar mais resultados (mostrando ' + min + ' de ' + this.lastResult[chatId].content.length + ' resultados).';
 			this.lastResult[chatId].offset += 10;
 		}
 		this.bot.sendMessage(chatId, str);
