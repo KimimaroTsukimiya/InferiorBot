@@ -38,6 +38,7 @@ BotManager.prototype.sendResults = function(chatId) {
 }
 
 BotManager.prototype.getNumOccurrences = function(word, chatId, callback) {
+	if (word.length <= 2) return callback(word, 0);
 	var self = this;
 	this.mongo.label.aggregate([
 		{ $match : { 'label' : new RegExp('^' + self.utils.escapeRegExp(word) + '$', 'i'), 'chatId' : chatId } },
@@ -51,7 +52,7 @@ BotManager.prototype.getNumOccurrences = function(word, chatId, callback) {
 BotManager.prototype.talk = function(msg) {
 	var message = msg.text;
 	var chatId = msg.chat.id;
-	var words = message.split(' ');
+	var words = message.split(/W/);
 	var allOccurrences = [];
 	for (var i = 0; i < words.length; i++) {
 		var count = 0;
