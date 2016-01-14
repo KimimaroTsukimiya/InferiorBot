@@ -90,7 +90,7 @@ BotManager.prototype.init = function() {
 				if (msg.text.length > 5 && msg.text.substr(msg.text.length - 4, msg.text.length) == "bot?") {
 					probability = 1.0;
 				}
-				if (msg.text && Math.random() <= self.responseProbability) {
+				if (msg.text && Math.random() <= probability) {
 					self.talk(msg);
 				}
 			}
