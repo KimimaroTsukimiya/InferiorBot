@@ -31,11 +31,11 @@ manager.addCommand(/^\/(\w+)(@inferiorbot)?(\W.+)$/i, '/<Rótulo> <Frase> - Salv
 manager.addCommand(/^\/(\w+)(@inferiorbot)?$/i, '/<Rótulo> - Encaminha uma mensagem enviada que foi gravada sob rótulo.', require('./commands/get-label'));
 manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?$/i, '/remove - Remove a última mensagem enviada por mim.', require('./commands/delete-label'));
 manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?\s+(\w+)(\W.+)$/i, '/remove <Rótulo> <Frase> - Remove uma frase associada a um rótulo.', require('./commands/delete-phrase'));
-manager.addCommand(/^\/lista(@inferiorbot)?(\s+frase|\s+voz|\s+video|\s+imagem|\s+sticker|\s+texto)?(\s+.+)?$/i, '/lista <frase|voz|video|imagem|sticker|texto> <palavra-chave> - Lista os rótulos salvos.', require('./commands/list'));
+manager.addCommand(/^\/lista(@inferiorbot)?(\s+frase|\s+conteudo|\s+voz|\s+video|\s+imagem|\s+sticker|\s+texto)?(\s+.+)?$/i, '/lista <frase|conteudo|voz|video|imagem|sticker|texto> <palavra-chave> - Lista os rótulos salvos.', require('./commands/list'));
 manager.init();
 
 // Setup express
-app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8081);
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8082);
 app.set('ip', process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 
 http.createServer(app).listen(app.get('port') ,app.get('ip'), function () {
