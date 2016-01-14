@@ -76,6 +76,9 @@ BotManager.prototype.talk = function(msg) {
 					var word = self.vocabulary.getRandomValue(allOccurrences);
 					// Say command label with word
 					self.commands['get-label'].callback(self, msg, [word, word]);
+				// Could not find any word to say, say anything about the bot itself
+				} else {
+					self.commands['get-label'].callback(self, msg, ['bot', 'bot']);
 				}
 			}
 		});
