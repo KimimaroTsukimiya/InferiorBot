@@ -52,14 +52,14 @@ BotManager.prototype.getNumOccurrences = function(word, chatId, callback) {
 BotManager.prototype.talk = function(msg) {
 	var message = msg.text;
 	var chatId = msg.chat.id;
-	var words = message.split(/\W+/);
+	var words = message.toLowerCase().split(/\W+/);
 	var allOccurrences = [];
 	for (var i = 0; i < words.length; i++) {
 		var count = 0;
 		var self = this;
 		this.getNumOccurrences(words[i], chatId, function(word, occurrences) {
 			//if (occurrences > 0) occurrences = Math.floor(1.0 / occurrences * 100); // penalize very frequent words 
-			if (word == "bot" || word == "o" || word == "que") {
+			if (word == "bot" || word == "o" || word == "que" || word == "voc" || word == "voce") {
 				occurrences = Math.floor(occurrences / 5);
 			}
 			for (var j = 0; j < occurrences; j++) {
