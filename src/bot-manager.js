@@ -5,6 +5,7 @@ BotManager = function(bot, mongo, vocabulary, utils, responseProbability) {
 	this.utils = utils;
 	this.responseProbability = responseProbability;
 	this.commands = [];
+	this.commandsNames = [];
 	this.lastMessage = [];
 	this.lastSent = [];
 	this.lastResult = [];
@@ -36,33 +37,41 @@ BotManager.prototype.sendResults = function(chatId) {
 	}
 }
 
-BotManager.prototype.getNumOccurrences = function(word, chatId) {
+BotManager.prototype.getNumOccurrences = function(word, chatId, callback) {
+	var self = this;
 	this.mongo.label.aggregate([
-		{ $match : { 'label' : new RegExp(this.utils.escapeRegExp(keyword), 'i'), 'chatId' : chatId } },
+		{ $match : { 'label' : new RegExp('^' + self.utils.escapeRegExp(word) + '$', 'i'), 'chatId' : chatId } },
 		{ $group : { _id : "$label", label : { $sum : 1 } } }
 	], function(err, arr) {
-		if (err || arr.length == 0) return 0;
-		return arr[0]['label'];
-	}
+		if (err || arr.length == 0) return callback(word, 0);
+		callback(word, arr[0].label);
+	});
 }
 
 BotManager.prototype.talk = function(msg) {
-	var message = msg.message;
+	var message = msg.text;
 	var chatId = msg.chat.id;
 	var words = message.split(' ');
 	var allOccurrences = [];
 	for (var i = 0; i < words.length; i++) {
-		var occurrences = this.getNumOccurrences(words[i], chatId);
-		for (var j = 0; j < occurrences; j++) {
-			allOccurrences.push(words[i]);
-		}
-	}
-	// There are words to say!
-	if (allOccurrences.length > 0) {
-		// Get a random word, where words with most occurrence have more probability to be picked (roullete like schema)
-		var word = this.vocabulary.getRandomValue(allOccurrences);
-		// Say command label with word
-		this.commands['get-label'].callback(this, msg, [word]);
+		var count = 0;
+		var self = this;
+		this.getNumOccurrences(words[i], chatId, function(word, occurrences) {
+			for (var j = 0; j < occurrences; j++) {
+				allOccurrences.push(word);
+			}
+			count++;
+			// All words were analyzed
+			if (count == words.length) {
+				// There are words to say!
+				if (allOccurrences.length > 0) {
+					// Get a random word, where words with most occurrence have more probability to be picked (roullete like schema)
+					var word = self.vocabulary.getRandomValue(allOccurrences);
+					// Say command label with word
+					self.commands['get-label'].callback(self, msg, [word, word]);
+				}
+			}
+		});
 	}
 }
 
@@ -75,8 +84,8 @@ BotManager.prototype.init = function() {
 				'id' : msg.message_id,
 				'type' : (msg.audio ? 'audio' : msg.voice ? 'voz' : msg.video ? 'video' : msg.photo ? 'imagem' : msg.sticker ? 'sticker' : 'texto')
 			};
-			if (msg.message && Math.random() <= BotManager.responseProbability) {
-				this.talk(msg);
+			if (msg.text && Math.random() <= self.responseProbability) {
+				self.talk(msg);
 			}
 		}
 	});
@@ -108,6 +117,7 @@ BotManager.prototype.addCommand = function(name, pattern, description, callback)
 		'description' : description,
 		'callback' : callback
 	};
+	this.commandsNames.push(name);
 	var self = this;
 	this.bot.onText(pattern, function(msg, matches) {
 		callback(self, msg, matches);
@@ -116,8 +126,8 @@ BotManager.prototype.addCommand = function(name, pattern, description, callback)
 
 BotManager.prototype.getCommandsString = function() {
 	var str = '';
-	for (var i = 0; i < this.commands.length; i++) {
-		str += this.commands[i].description + '\n';
+	for (var i = 0; i < this.commandsNames.length; i++) {
+		str += this.commands[this.commandsNames[i]].description + '\n';
 	}
 	return str;
 }
