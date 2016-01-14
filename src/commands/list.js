@@ -15,13 +15,23 @@ module.exports = function(context, msg, matches) {
 			'label' : new RegExp(keyword, 'i')
 		};
 	}
-	context.mongo.label.distinct('label', doc, function(err, arr) {
+	context.mongo.label.aggregate([
+		{ $match : doc },
+		{ $group : { _id : "$label", label : { $sum : 1 } } },
+		{ $sort : { label : -1 } }
+	], function(err, arr) {
 		if (err) {
 			context.bot.sendMessage(chatId, context.vocabulary.sendError(err));
 		} else {
 			if (arr.length == 0) {
 				context.bot.sendMessage(chatId, context.vocabulary.notFound());
 			} else {
+				for (var i = 0; i < arr.length; i++) {
+					arr[i] = {
+						'label' : arr[i]._id,
+						'count' : arr[i].label
+					};
+				}
 				context.addLastResult(chatId, {
 					'content' : arr,
 					'offset' : 0
