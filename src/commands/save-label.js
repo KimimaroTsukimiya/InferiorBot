@@ -2,7 +2,7 @@ module.exports = function(context, msg, matches) {
 	var label = matches[3].toLowerCase();
 	var firstName = msg.from.first_name.toLowerCase();
 	var username = msg.from.username.toLowerCase();
-	if (!context.isReserved(label) && label != firstName && label != username && (label != "gleencantor" || label != "vizircantor" || label != "zanescantor" || username == "abnerhihi")) {
+	if (!context.isReserved(label) && label != firstName && label != username && (!context.utils.contains(context.permanentCommands, label) || context.utils.contains(context.adminPowers, username))) {
 		var chatId 	= msg.chat.id;
 		var id 		= context.lastMessage[chatId].id;
 		var type 	= context.lastMessage[chatId].type;

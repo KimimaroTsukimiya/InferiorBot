@@ -23,15 +23,17 @@ var token = process.env.TELEGRAM_TOKEN;
 var bot = new TelegramBot(token, {polling: true});
 console.log("Connecting to telegram bot with token " + token);
 
-var manager = new BotManager(bot, mongo, require('./vocabulary'), require('./utils'));
+var manager = new BotManager(bot, mongo, require('./vocabulary'), require('./utils'), 1.0);
 manager.setReservedWords('help', 'ajuda', 'grava', 'salva', 'guarda', 'remove', 'deleta', 'lista', 'img', 'mais');
-manager.addCommand(/^\/(help|ajuda)(@inferiorbot)?$/i, '/help - Mostra essa lista deplorável.', require('./commands/help'));
-manager.addCommand(/^\/(grava|salva|guarda)(@inferiorbot)?\s+(\w+)$/i, '/salva <Rótulo> - Salva a última mensagem enviada sob um rótulo.', require('./commands/save-label'));
-manager.addCommand(/^\/(\w+)(@inferiorbot)?(\W.+)$/i, '/<Rótulo> <Frase> - Salva uma frase relacionada a um rótulo.', require('./commands/save-phrase'));
-manager.addCommand(/^\/(\w+)(@inferiorbot)?$/i, '/<Rótulo> - Encaminha uma mensagem enviada que foi gravada sob rótulo.', require('./commands/get-label'));
-manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?$/i, '/remove - Remove a última mensagem enviada por mim.', require('./commands/delete-label'));
-manager.addCommand(/^\/(remove|deleta)(@inferiorbot)?\s+(\w+)(\W.+)$/i, '/remove <Rótulo> <Frase> - Remove uma frase associada a um rótulo.', require('./commands/delete-phrase'));
-manager.addCommand(/^\/lista(@inferiorbot)?(\s+frase|\s+conteudo|\s+voz|\s+video|\s+imagem|\s+sticker|\s+texto)?(\s+.+)?$/i, '/lista <frase|conteudo|voz|video|imagem|sticker|texto> <palavra-chave> - Lista os rótulos salvos.', require('./commands/list'));
+manager.setPermanentCommands('gleencantor', 'vizircantor', 'zanescantor');
+manager.setAdminPowers('abnerhihi');
+manager.addCommand('help', /^\/(help|ajuda)(@inferiorbot)?$/i, '/help - Mostra essa lista deplorável.', require('./commands/help'));
+manager.addCommand('save-label', /^\/(grava|salva|guarda)(@inferiorbot)?\s+(\w+)$/i, '/salva <Rótulo> - Salva a última mensagem enviada sob um rótulo.', require('./commands/save-label'));
+manager.addCommand('save-phrase', /^\/(\w+)(@inferiorbot)?(\W.+)$/i, '/<Rótulo> <Frase> - Salva uma frase relacionada a um rótulo.', require('./commands/save-phrase'));
+manager.addCommand('get-label', /^\/(\w+)(@inferiorbot)?$/i, '/<Rótulo> - Encaminha uma mensagem enviada que foi gravada sob rótulo.', require('./commands/get-label'));
+manager.addCommand('delete-label', /^\/(remove|deleta)(@inferiorbot)?$/i, '/remove - Remove a última mensagem enviada por mim.', require('./commands/delete-label'));
+manager.addCommand('delete-phrase', /^\/(remove|deleta)(@inferiorbot)?\s+(\w+)(\W.+)$/i, '/remove <Rótulo> <Frase> - Remove uma frase associada a um rótulo.', require('./commands/delete-phrase'));
+manager.addCommand('list', /^\/lista(@inferiorbot)?(\s+frase|\s+conteudo|\s+voz|\s+video|\s+imagem|\s+sticker|\s+texto)?(\s+.+)?$/i, '/lista <frase|conteudo|voz|video|imagem|sticker|texto> <palavra-chave> - Lista os rótulos salvos.', require('./commands/list'));
 manager.init();
 
 // Setup express

@@ -1,13 +1,16 @@
-BotManager = function(bot, mongo, vocabulary, utils) {
+BotManager = function(bot, mongo, vocabulary, utils, responseProbability) {
 	this.bot = bot;
 	this.mongo = mongo;
 	this.vocabulary = vocabulary;
 	this.utils = utils;
+	this.responseProbability = responseProbability;
 	this.commands = [];
 	this.lastMessage = [];
 	this.lastSent = [];
 	this.lastResult = [];
 	this.reservedWords = [];
+	this.permanentCommands = [];
+	this.adminPowers = [];
 }
 
 BotManager.prototype.addLastSent = function(chatId, id) {
@@ -33,6 +36,36 @@ BotManager.prototype.sendResults = function(chatId) {
 	}
 }
 
+BotManager.prototype.getNumOccurrences = function(word, chatId) {
+	this.mongo.label.aggregate([
+		{ $match : { 'label' : new RegExp(this.utils.escapeRegExp(keyword), 'i'), 'chatId' : chatId } },
+		{ $group : { _id : "$label", label : { $sum : 1 } } }
+	], function(err, arr) {
+		if (err || arr.length == 0) return 0;
+		return arr[0]['label'];
+	}
+}
+
+BotManager.prototype.talk = function(msg) {
+	var message = msg.message;
+	var chatId = msg.chat.id;
+	var words = message.split(' ');
+	var allOccurrences = [];
+	for (var i = 0; i < words.length; i++) {
+		var occurrences = this.getNumOccurrences(words[i], chatId);
+		for (var j = 0; j < occurrences; j++) {
+			allOccurrences.push(words[i]);
+		}
+	}
+	// There are words to say!
+	if (allOccurrences.length > 0) {
+		// Get a random word, where words with most occurrence have more probability to be picked (roullete like schema)
+		var word = this.vocabulary.getRandomValue(allOccurrences);
+		// Say command label with word
+		this.commands['get-label'].callback(this, msg, [word]);
+	}
+}
+
 BotManager.prototype.init = function() {
 	var self = this;
 	this.bot.on('message', function(msg) {
@@ -42,6 +75,9 @@ BotManager.prototype.init = function() {
 				'id' : msg.message_id,
 				'type' : (msg.audio ? 'audio' : msg.voice ? 'voz' : msg.video ? 'video' : msg.photo ? 'imagem' : msg.sticker ? 'sticker' : 'texto')
 			};
+			if (msg.message && Math.random() <= BotManager.responseProbability) {
+				this.talk(msg);
+			}
 		}
 	});
 	this.bot.onText(/^\/mais(@inferiorbot)?$/i, function(msg) {
@@ -54,16 +90,24 @@ BotManager.prototype.setReservedWords = function() {
 	this.reservedWords = arguments;
 }
 
+BotManager.prototype.setPermanentCommands = function() {
+	this.permanentCommands = arguments;
+}
+
+BotManager.prototype.setAdminPowers = function() {
+	this.adminPowers = arguments;
+}
+
 BotManager.prototype.isReserved = function(word) {
 	return this.utils.contains(this.reservedWords, word);
 }
 
-BotManager.prototype.addCommand = function(pattern, description, callback) {
-	this.commands.push({
+BotManager.prototype.addCommand = function(name, pattern, description, callback) {
+	this.commands[name] = {
 		'pattern' : pattern,
 		'description' : description,
 		'callback' : callback
-	});
+	};
 	var self = this;
 	this.bot.onText(pattern, function(msg, matches) {
 		callback(self, msg, matches);

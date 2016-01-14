@@ -5,7 +5,7 @@ module.exports = function(context, msg, matches) {
 	var verbose = matches[2] ? true : false;
 	var firstName = msg.from.first_name.toLowerCase();
 	var username = msg.from.username;
-	if (label != firstName && label != username) {
+	if (label != firstName && label != username && (!context.utils.contains(context.permanentCommands, label) || context.utils.contains(context.adminPowers, username))) {
 		context.mongo.label.find({
 			'chatId' : chatId,
 			'label' : label,
