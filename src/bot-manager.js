@@ -59,8 +59,10 @@ BotManager.prototype.talk = function(msg) {
 		var self = this;
 		this.getNumOccurrences(words[i], chatId, function(word, occurrences) {
 			//if (occurrences > 0) occurrences = Math.floor(1.0 / occurrences * 100); // penalize very frequent words 
-			if (word == "bot" || word == "o" || word == "que" || word == "voc" || word == "voce") {
+			if (word == "o" || word == "que" || word == "voc" || word == "voce") {
 				occurrences = Math.floor(occurrences / 5);
+			} else if (word == "a" || word == "bot") {
+				occurrences = Math.floor(occurrences / 10);
 			}
 			for (var j = 0; j < occurrences; j++) {
 				allOccurrences.push(word);
@@ -91,7 +93,7 @@ BotManager.prototype.init = function() {
 			};
 			if (msg.text) {
 				var probability = self.responseProbability;
-				if (msg.text.length > 5 && msg.text.substr(msg.text.length - 4, msg.text.length) == "bot?") {
+				if (msg.text.length > 5 && (msg.text.substr(msg.text.length - 4, msg.text.length) == "bot?" || msg.text.substr(msg.text.length - 3, msg.text.length) == "bot")) {
 					probability = 1.0;
 				}
 				if (msg.text && Math.random() <= probability) {
